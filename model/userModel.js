@@ -12,6 +12,9 @@ const userSchema =new mongoose.Schema( {
         minlength : [6,'password should be more than 6 charecter'],
         required : [true,'Must enter password'],
         // match : [/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,1024}$/,'please enter a secure password']
+    },
+    jwtCode:{
+        type:String
     }
 })
 const User = mongoose.model('User',userSchema)

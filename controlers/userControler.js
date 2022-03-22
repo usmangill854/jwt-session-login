@@ -1,9 +1,16 @@
 const auth = require("../middleware/auth");
 const User = require("../model/userModel");
 const jwt = require("jsonwebtoken");
+const { findOneAndUpdate } = require("../model/userModel");
 
 exports.getAll = (req, res) => {
-  console.log(req.session.user);
+  if (req.session.test) {
+    console.log("reading", req.session.test);
+  }
+  else{
+    req.session.test = 'aaaaa'  
+    console.log("writing", req.session.test);
+  }
   const user = req.session.user;
   if (user) {
     res.json({ user: user });
@@ -42,7 +49,14 @@ exports.login = async (req, res) => {
           expiresIn: "1h",
         }
       );
-      console.log(user);
+      const id = user._id;
+      //   console.log(id)
+      await User.findOneAndUpdate(id, {
+        jwtCode: token,
+      });
+
+      //   await user.jwtCode : req.headers
+      //   console.log(n);
       req.session.user = user;
       req.session.token = token;
       res.status(200).json({ status: "success", token: token, user: user });
